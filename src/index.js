@@ -8,6 +8,8 @@ import calbackPhone from './modules/calbackPhone';
 import sendForm from './modules/sendForm';
 import getSurprise from './modules/getSurprise';
 import toggleTitleSlider from './modules/toggleTitleSlider';
+import getGumbMeny from './modules/getGumbMeny';
+
 // выбор сверху клубы
 menyClub()
 // удаление попап
@@ -22,3 +24,5 @@ sendForm()
 getSurprise();
 // слайдер на заголовке
 toggleTitleSlider();
+// гамбургур меню
+getGumbMeny();
