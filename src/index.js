@@ -9,6 +9,7 @@ import sendForm from './modules/sendForm';
 import getSurprise from './modules/getSurprise';
 import toggleTitleSlider from './modules/toggleTitleSlider';
 import getGumbMeny from './modules/getGumbMeny';
+import arrowScroll from './modules/arrowScroll';
 
 // выбор сверху клубы
 menyClub()
@@ -26,3 +27,5 @@ getSurprise();
 toggleTitleSlider();
 // гамбургур меню
 getGumbMeny();
+// скролл стрелочки
+arrowScroll()

@@ -26,8 +26,8 @@ const sendForm = () => {
                 e.preventDefault();
                 //тут можно указать что идет загрузка
                 const checbox = elem.querySelector('[type="checkbox"]');
-                // проверка на указан чек или нет
-                if(checbox.checked === true){
+                    // проверка на указан чек или нет
+                if(!checbox || checbox.checked === true){
                     const formData = new FormData(elem);
                     let body = {};
                     for(let val of formData.entries()){
@@ -49,7 +49,6 @@ const sendForm = () => {
                 }else{
                     alert('Установите галочку на обработке данных')
                 }
-                 
             });
         
         

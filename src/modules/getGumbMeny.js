@@ -3,21 +3,37 @@ const getGumbMeny = () => {
         popupMenu = document.querySelector('.popup-menu'),
         topMenu = document.querySelector('.top-menu');
     //  фиксация к верху экрана при скроле
+    const stickCss = () => {
+        topMenu.style.top = '0';
+        topMenu.style.left = '0';
+        topMenu.style.width = '100%';
+        topMenu.style.position = 'fixed'
+    };
+    const nostickCss = () => {
+        topMenu.style.top = '';
+        topMenu.style.left = '';
+        topMenu.style.width = '';
+        topMenu.style.position = '';
+    }
+    const toggleMenu = () => {
+        document.addEventListener('scroll', () => {
+            if(topMenu.clientHeight < window.scrollY / 3){
+                stickCss();
+            } else if(topMenu.clientHeight >= window.scrollY / 3){
+                nostickCss();
+            }
+        })
+    }
     window.addEventListener('scroll', () => {
-        if(topMenu.clientHeight < window.scrollY / 3){
-            topMenu.style.top = '0';
-            topMenu.style.left = '0';
-            topMenu.style.width = '100%';
-            topMenu.style.position = 'fixed';
-        } else if(topMenu.clientHeight >= window.scrollY / 3){
-            topMenu.style.top = '';
-            topMenu.style.left = '';
-            topMenu.style.width = '';
-            topMenu.style.position = '';
+        if(window.innerWidth < 768){
+            toggleMenu();
+        }else if(window.innerWidth >= 768){
+            nostickCss();
+            return;
         }
     })
     // открытие меню
-    hiddenLarge.addEventListener('click', () => {
+    hiddenLarge.querySelector('img').addEventListener('click', () => {
         popupMenu.style.display = 'flex'
     })
     // закрытие меню
@@ -27,5 +43,5 @@ const getGumbMeny = () => {
             popupMenu.style.display = ''
         }
     })
-};
+}
 export default getGumbMeny;

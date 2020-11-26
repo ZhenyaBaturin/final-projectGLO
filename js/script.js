@@ -9,13 +9,13 @@ const menyClub = () => {
         const removeMeny = () => {
             clubList.style.display ='';
         }
-    clubsList.addEventListener('click', () => {
-        if(clubList.style.display ===''){
+    clubsList.addEventListener('click', (e) => {
+        let target = e.target;
+        if(clubList.style.display ==='' && target.matches('p')){
             getMeny()
-        } else if (clubList.style.display ==='block'){
+        } else if (clubList.style.display ==='block' && target.matches('p')){
             removeMeny()
-        }
-        
+        }  
     })
 }
 menyClub()
@@ -81,8 +81,8 @@ const sendForm = () => {
                 e.preventDefault();
                 //тут можно указать что идет загрузка
                 const checbox = elem.querySelector('[type="checkbox"]');
-                // проверка на указан чек или нет
-                if(checbox.checked === true){
+                    // проверка на указан чек или нет
+                if(!checbox || checbox.checked === true){
                     const formData = new FormData(elem);
                     let body = {};
                     for(let val of formData.entries()){
@@ -104,7 +104,6 @@ const sendForm = () => {
                 }else{
                     alert('Установите галочку на обработке данных')
                 }
-                 
             });
         
         
@@ -148,11 +147,17 @@ sendForm()
 const getSurprise =() => {
     const fixedGift = document.querySelector('.fixed-gift'),
         giftModal = document.getElementById('gift');
-    fixedGift.addEventListener('click', () => {
-        giftModal.style.display = 'block';
-        fixedGift.style.display  = 'none';
-        removePopup();
-    })
+        if(fixedGift){
+            fixedGift.addEventListener('click', () => {
+                giftModal.style.display = 'block';
+                fixedGift.style.display  = 'none';
+                removePopup();
+            })
+        } else {
+            return;
+        }
+    
+   
 }
 getSurprise();
 
@@ -181,21 +186,37 @@ const getGumbMeny = () => {
         popupMenu = document.querySelector('.popup-menu'),
         topMenu = document.querySelector('.top-menu');
     //  фиксация к верху экрана при скроле
+    const stickCss = () => {
+        topMenu.style.top = '0';
+        topMenu.style.left = '0';
+        topMenu.style.width = '100%';
+        topMenu.style.position = 'fixed'
+    };
+    const nostickCss = () => {
+        topMenu.style.top = '';
+        topMenu.style.left = '';
+        topMenu.style.width = '';
+        topMenu.style.position = '';
+    }
+    const toggleMenu = () => {
+        document.addEventListener('scroll', () => {
+            if(topMenu.clientHeight < window.scrollY / 3){
+                stickCss();
+            } else if(topMenu.clientHeight >= window.scrollY / 3){
+                nostickCss();
+            }
+        })
+    }
     window.addEventListener('scroll', () => {
-        if(topMenu.clientHeight < window.scrollY / 3){
-            topMenu.style.top = '0';
-            topMenu.style.left = '0';
-            topMenu.style.width = '100%';
-            topMenu.style.position = 'fixed';
-        } else if(topMenu.clientHeight >= window.scrollY / 3){
-            topMenu.style.top = '';
-            topMenu.style.left = '';
-            topMenu.style.width = '';
-            topMenu.style.position = '';
+        if(window.innerWidth < 768){
+            toggleMenu();
+        }else if(window.innerWidth >= 768){
+            nostickCss();
+            return;
         }
     })
     // открытие меню
-    hiddenLarge.addEventListener('click', () => {
+    hiddenLarge.querySelector('img').addEventListener('click', () => {
         popupMenu.style.display = 'flex'
     })
     // закрытие меню
@@ -207,6 +228,27 @@ const getGumbMeny = () => {
     })
 }
 getGumbMeny();
+
+const arrowScroll = () => {
+    const totop = document.getElementById('totop');
+    totop.style.display = 'none';
+    window.addEventListener('scroll', () => {
+        if(window.scrollY >= document.documentElement.clientHeight){
+            totop.style.display = 'block';
+        } else if(window.scrollY < document.documentElement.clientHeight) {
+            totop.style.display = 'none';
+        }
+    });
+    totop.addEventListener('click', (e) => {
+        e.preventDefault();
+        const idBlock = totop.getAttribute('href');
+        document.querySelector(idBlock).scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    });
+} 
+arrowScroll();
 
 
 

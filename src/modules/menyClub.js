@@ -7,14 +7,13 @@ const menyClub = () => {
         const removeMeny = () => {
             clubList.style.display ='';
         }
-    clubsList.addEventListener('click', () => {
-        if(clubList.style.display ===''){
+    clubsList.addEventListener('click', (e) => {
+        let target = e.target;
+        if(clubList.style.display ==='' && target.matches('p')){
             getMeny()
-        } else if (clubList.style.display ==='block'){
+        } else if (clubList.style.display ==='block' && target.matches('p')){
             removeMeny()
-        }
-        
+        }  
     })
-    
-};
+}
 export default menyClub;
