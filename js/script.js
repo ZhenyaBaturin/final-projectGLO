@@ -2,20 +2,22 @@
 
 const menyClub = () => {
     const clubsList = document.querySelector('.clubs-list'),
-        clubList = clubsList.querySelector('ul');
+        clubList = clubsList.querySelector('ul'),
+        body = document.querySelector('body');
         const getMeny = () => {
             clubList.style.display ='block';
         }
         const removeMeny = () => {
             clubList.style.display ='';
         }
-    clubsList.addEventListener('click', (e) => {
+        body.addEventListener('click', (e) => {
         let target = e.target;
         if(clubList.style.display ==='' && target.matches('p')){
             getMeny()
-        } else if (clubList.style.display ==='block' && target.matches('p')){
+        } else if (clubList.style.display ==='block' && !target.matches('ul') && !target.matches('li')){
             removeMeny()
         }  
+
     })
 }
 menyClub()
@@ -249,6 +251,109 @@ const arrowScroll = () => {
     });
 } 
 arrowScroll();
+
+const getArrow = () => {
+// создать стрелочки
+const gallerySlider = document.querySelector('.gallery-slider'),
+    servicesSlider = document.querySelector('.services-slider')
+const prev = document.createElement("div");
+gallerySlider.style.position = 'relative';
+servicesSlider.style.position = 'relative';
+prev.classList.add('prev');
+prev.classList.add('slider-arrow');
+prev.innerHTML = `
+        <span>
+            <i class='fa fa-angel-left'></i>
+        </span>
+`;
+gallerySlider.append(prev);
+// servicesSlider.append(prev);
+const next = document.createElement("div");
+next.classList.add('next');
+next.classList.add('slider-arrow');
+next.innerHTML = `
+        <span>
+            <i class='fa fa-angel-right'></i>
+        </span>
+`;
+gallerySlider.append(next);
+// servicesSlider.append(next);
+}
+getArrow()
+
+const mainSlider = () => {
+    const gallerySlider = document.querySelector('.gallery-slider'),
+        slide = gallerySlider.querySelectorAll('.slide'),
+        btnPrev = document.querySelector('.prev'),
+        btnNext = document.querySelector('.next');
+    slide.forEach((item) => {
+        item.style.display = 'none'
+    })
+    let currentSlide = 0,
+        interval = 0;
+
+    const prevSlide = (elem, index, strDisplay) => {
+        elem[index].style.display =strDisplay;
+    }
+    const nextSlide = (elem, index, strDisplay) => {
+        elem[index].style.display = strDisplay;
+    }
+    nextSlide(slide, currentSlide, 'flex');
+
+    const autoPlaySlide = () => {
+        prevSlide(slide, currentSlide, 'none');
+        currentSlide++;
+        if(currentSlide >= slide.length){
+            currentSlide = 0;
+        }
+        nextSlide(slide, currentSlide, 'flex');
+    }
+
+    gallerySlider.addEventListener('click', (e) => {
+        let target = e.target;
+        if(target.closest('arrow')){
+            return;
+        }
+        prevSlide(slide, currentSlide, 'none');
+        if(target.closest('.slider-arrow')){
+            currentSlide++;
+        }else if(target.closest('.prev')){
+            currentSlide--;
+        } 
+        if(currentSlide >= slide.length){
+            currentSlide = 0;
+        }
+        if(currentSlide < 0){
+            currentSlide = slide.length - 1;
+        }
+        nextSlide(slide, currentSlide, 'flex');
+    });
+    gallerySlider.addEventListener('mouseover', (e) => {
+        let target = e.target;
+        
+        if(target.closest(".slider-arrow") ){
+            console.log(target);
+            stoptSlide();
+        }
+    });
+    gallerySlider.addEventListener('mouseout', (e) => {
+        let target = e.target;
+        
+        if(target.closest(".slider-arrow") ){
+            startSlide();
+        }
+    })
+
+    const startSlide = () => {
+        interval = setInterval(autoPlaySlide, 3000)
+    }
+    const stoptSlide = () => {
+        clearInterval(interval)
+    }
+
+    startSlide();
+}
+mainSlider()
 
 
 

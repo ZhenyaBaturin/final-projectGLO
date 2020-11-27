@@ -10,6 +10,8 @@ import getSurprise from './modules/getSurprise';
 import toggleTitleSlider from './modules/toggleTitleSlider';
 import getGumbMeny from './modules/getGumbMeny';
 import arrowScroll from './modules/arrowScroll';
+import getArrow from './modules/getArrow';
+import mainSlider from './modules/mainSlider';
 
 // выбор сверху клубы
 menyClub()
@@ -29,3 +31,7 @@ toggleTitleSlider();
 getGumbMeny();
 // скролл стрелочки
 arrowScroll()
+// стрелки 
+getArrow()
+//галерея
+mainSlider();
