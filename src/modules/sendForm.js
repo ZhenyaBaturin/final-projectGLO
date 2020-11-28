@@ -21,7 +21,7 @@ const sendForm = () => {
     formName.forEach((item) => {
         if (item === promoСode){
             item.addEventListener('input', () => {
-                item.value = item.value.replace(/[^0-9+][а-я\s]/gi, '');
+                item.value = item.value.replace(/\s/gi, '');
             })
         } else{
             item.addEventListener('input', () => {

@@ -12,6 +12,7 @@ import getGumbMeny from './modules/getGumbMeny';
 import arrowScroll from './modules/arrowScroll';
 import getArrow from './modules/getArrow';
 import mainSlider from './modules/mainSlider';
+import calc from './modules/calc';
 
 // выбор сверху клубы
 menyClub()
@@ -35,3 +36,5 @@ arrowScroll()
 getArrow()
 //галерея
 mainSlider();
+// калькулятор
+calc()
