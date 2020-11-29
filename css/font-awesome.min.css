@@ -1170,7 +1170,7 @@
 }
 
 .fa-angle-left:before {
-    content: "../images/arrow-left.png"
+    content: "\f104"
 }
 
 .fa-angle-right:before {

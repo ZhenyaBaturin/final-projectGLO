@@ -11,7 +11,9 @@ const getArrow = () => {
         prev.classList.add('slider-arrow');
         prev.innerHTML = `
             <span>
-                <i class='fa fa-angel-left'></i>
+                <i class='fa fa-angel-left'>
+                    <
+                </i>
             </span>
     `;
         gallerySlider.append(prev);
@@ -24,7 +26,9 @@ const getArrow = () => {
         prev.classList.add('slider-arrow');
         prev.innerHTML = `
             <span>
-                <i class='fa fa-angel-left'></i>
+                <i class='fa fa-angel-left'>
+                    < 
+                </i>
             </span>
     `;
         servicesSlider.append(prev);
@@ -37,7 +41,9 @@ const getArrow = () => {
         next.classList.add('slider-arrow');
         next.innerHTML = `
             <span>
-                <i class='fa fa-angel-right'></i>
+                <i class='fa fa-angel-right'>
+                   > 
+                </i>
             </span>
     `;
         gallerySlider.append(next);
@@ -49,7 +55,9 @@ const getArrow = () => {
         next.classList.add('slider-arrow');
         next.innerHTML = `
             <span>
-                <i class='fa fa-angel-right'></i>
+                <i class='fa fa-angel-right'>
+                    >
+                </i>
             </span>
         `;
     
