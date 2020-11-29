@@ -50,7 +50,6 @@ const mainSlider = () => {
         let target = e.target;
         
         if(target.closest(".slider-arrow") ){
-            console.log(target);
             stoptSlide();
         }
     });

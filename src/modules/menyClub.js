@@ -10,7 +10,6 @@ const menyClub = () => {
         }
         body.addEventListener('click', (e) => {
         let target = e.target;
-        console.log(e);
         if(clubList.style.display ==='' && target.matches('p')){
             getMeny()
         } else if (clubList.style.display ==='block' && !target.matches('ul') && !target.matches('li')){

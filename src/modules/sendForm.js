@@ -9,7 +9,6 @@ const sendForm = () => {
         answerThanks = 'Спасибо',
         answerPhone = 'Некорректно данные',
         answerCheck = 'Дайте согласие на обработку ваших данных',
-        invalidPhoneNumber = 'Неверный номер телефона',
         chooseClub = 'Выберите клуб',
         chooseCart = 'Выберите карту';
     const form = document.querySelectorAll('form'),
@@ -21,21 +20,19 @@ const sendForm = () => {
     formName.forEach((item) => {
         if (item === promoСode){
             item.addEventListener('input', () => {
-                item.value = item.value.replace(/\s/gi, '');
+                promoСode.value = promoСode.value.replace(/\s/gi, '');
+                promoСode.removeAttribute('required');
             })
         } else{
             item.addEventListener('input', () => {
                 item.value = item.value.replace(/[^а-я\s]/gi, '');
             })
-        }
-        
-        
+        }  
     });
     formPhone.forEach((item) => {
         item.addEventListener('input', () => {
             item.setAttribute('maxlength', '11');
-            item.value = item.value.replace(/[^0-9+]/g, '');  
-                   
+            item.value = item.value.replace(/[^0-9+]/g, '');         
         })
     });
     // отправка 
@@ -44,13 +41,16 @@ const sendForm = () => {
                 e.preventDefault();
                 const checbox = elem.querySelector('[type="checkbox"]');
                 const phone =elem.querySelector('[type="tel"]'),
+                inputs = elem.querySelectorAll('input'),
                 cardType = elem.querySelectorAll('[name="card-type"]'),
-                clubName = elem.querySelectorAll('[name="club-name"]');
+                clubName = elem.querySelectorAll('[name="club-name"]'),
+                label = elem.querySelector('p>label');
 
                 if(phone.value.length < 6 || !phone.value.match(/^((8|\+7)[\-]?)?(\(?\d{3}\)?[\-]?)?[\d\-]{7,10}$/ig)){
-                    getThanksModal(invalidPhoneNumber, answerPhone);
+                    phone.style.border = 'solid 1px red';
                     return;
                 };
+                phone.style.border = '';
                 
                 if (elem.id === 'card_order' || elem.id === 'footer_form') {
                     const type = [...cardType],
@@ -72,7 +72,6 @@ const sendForm = () => {
                 if(!checbox || checbox.checked === true){
                     const formData = new FormData(elem);
                     let body = {};
-                    console.log(formData);
                     formData.forEach((val, key) => body[key] = val);
                     console.log(body);
                     // fetch
@@ -82,15 +81,32 @@ const sendForm = () => {
                             throw new Error('error')
                         }
                         getThanksModal(successMessege, answerThanks, requestSend);
+                        label.classList.remove('red');
+                        clearForm();
                         timeOut();
                         })
                         .catch((error) => {
-                            getThanksModal(answerThanks, errorMessege);
+                            getThanksModal(errorMessege, answerThanks);
                             timeOut();
+                            label.classList.remove('red');
                             console.log(error);
-                        }) 
+                        })
+                        .finally(() => {
+                            inputs.forEach(input => {
+                                if (input.type === 'checkbox' || input.name === 'radio') {
+                                  input.checked = false;
+                                }
+                                if (input.type === 'tel' || input.name === 'name' || input.name === 'promocode') {
+                                  input.value = '';
+                                }
+                                if(input.id === 'card_leto_mozaika' || input.id === 'm1' || input.id === 't1'){
+                                    input.checked = true;
+                                }
+                              });
+                        })
                 }else{
-                    getThanksModal(answerCheck, answerPhone)
+                    getThanksModal(answerCheck, answerPhone);
+                    label.classList.add('red');
                 }
             });
         
@@ -104,9 +120,6 @@ const sendForm = () => {
             })
         }
         const getThanksModal = (statis, answer, application = '') => {
-            if(application){
-                clearForm();
-            };
             thanksModal.style.display = 'block';
             const formContent = thanksModal.querySelector('.form-content');
             formContent.innerHTML = `
@@ -121,17 +134,18 @@ const sendForm = () => {
         const clearForm = () => {
             const popup = document.querySelectorAll('.popup');
             popup.forEach((item) => {
-            item.style.display ='';
-            const valueForm = document.querySelectorAll('input');
-            valueForm.forEach((elem) => {
-                        elem.value = '';
-                        elem.checked = false;     
+                if(item.id === 'callback_form' || item.id === 'free_visit_form'){
+                    item.style.display ='';
+                }
             })
-        })
         };
+
         let timeOut = () => {
             setTimeout(() => {
-               clearForm()
+                const popup = document.querySelectorAll('.popup');
+                     popup.forEach((item) => {
+                     item.style.display ='';
+                     })
             }, 3000);
         };
     }) 

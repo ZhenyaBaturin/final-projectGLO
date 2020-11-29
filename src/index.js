@@ -12,6 +12,7 @@ import getGumbMeny from './modules/getGumbMeny';
 import arrowScroll from './modules/arrowScroll';
 import getArrow from './modules/getArrow';
 import mainSlider from './modules/mainSlider';
+import slideCarousel from './modules/slideCarousel';
 import calc from './modules/calc';
 
 // выбор сверху клубы
@@ -36,5 +37,7 @@ arrowScroll()
 getArrow()
 //галерея
 mainSlider();
+// карусель
+slideCarousel()
 // калькулятор
 calc()

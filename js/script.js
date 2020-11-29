@@ -28,12 +28,10 @@ const removePopup = () => {
             const target = e.target;
                 if(target.matches('.overlay') || target.matches('.close_icon') || target.matches('.close-btn')){
                     item.style.display = '';
-                    clearForm();
                 }
         })
     })
 } 
-
 
  const freeSession = () => {
      const openPopup = document.querySelector('.open-popup'),
@@ -56,7 +54,6 @@ const calbackPhone = () => {
 }
 calbackPhone()
 
-
 const sendForm = () => {
     const errorMessege = 'Что то пошло не так',
         loadMessege  = 'Загрузка...',
@@ -65,7 +62,6 @@ const sendForm = () => {
         answerThanks = 'Спасибо',
         answerPhone = 'Некорректно данные',
         answerCheck = 'Дайте согласие на обработку ваших данных',
-        invalidPhoneNumber = 'Неверный номер телефона',
         chooseClub = 'Выберите клуб',
         chooseCart = 'Выберите карту';
     const form = document.querySelectorAll('form'),
@@ -78,20 +74,18 @@ const sendForm = () => {
         if (item === promoСode){
             item.addEventListener('input', () => {
                 promoСode.value = promoСode.value.replace(/\s/gi, '');
+                promoСode.removeAttribute('required');
             })
         } else{
             item.addEventListener('input', () => {
                 item.value = item.value.replace(/[^а-я\s]/gi, '');
             })
-        }
-        
-        
+        }  
     });
     formPhone.forEach((item) => {
         item.addEventListener('input', () => {
             item.setAttribute('maxlength', '11');
-            item.value = item.value.replace(/[^0-9+]/g, '');  
-                   
+            item.value = item.value.replace(/[^0-9+]/g, '');         
         })
     });
     // отправка 
@@ -100,13 +94,16 @@ const sendForm = () => {
                 e.preventDefault();
                 const checbox = elem.querySelector('[type="checkbox"]');
                 const phone =elem.querySelector('[type="tel"]'),
+                inputs = elem.querySelectorAll('input'),
                 cardType = elem.querySelectorAll('[name="card-type"]'),
-                clubName = elem.querySelectorAll('[name="club-name"]');
+                clubName = elem.querySelectorAll('[name="club-name"]'),
+                label = elem.querySelector('p>label');
 
                 if(phone.value.length < 6 || !phone.value.match(/^((8|\+7)[\-]?)?(\(?\d{3}\)?[\-]?)?[\d\-]{7,10}$/ig)){
-                    getThanksModal(invalidPhoneNumber, answerPhone);
+                    phone.style.border = 'solid 1px red';
                     return;
                 };
+                phone.style.border = '';
                 
                 if (elem.id === 'card_order' || elem.id === 'footer_form') {
                     const type = [...cardType],
@@ -128,7 +125,6 @@ const sendForm = () => {
                 if(!checbox || checbox.checked === true){
                     const formData = new FormData(elem);
                     let body = {};
-                    console.log(formData);
                     formData.forEach((val, key) => body[key] = val);
                     console.log(body);
                     // fetch
@@ -138,15 +134,32 @@ const sendForm = () => {
                             throw new Error('error')
                         }
                         getThanksModal(successMessege, answerThanks, requestSend);
+                        label.classList.remove('red');
+                        clearForm();
                         timeOut();
                         })
                         .catch((error) => {
                             getThanksModal(answerThanks, errorMessege);
                             timeOut();
+                            
                             console.log(error);
-                        }) 
+                        })
+                        .finally(() => {
+                            inputs.forEach(input => {
+                                if (input.type === 'checkbox' || input.name === 'radio') {
+                                  input.checked = false;
+                                }
+                                if (input.type === 'tel' || input.name === 'name' || input.name === 'promocode') {
+                                  input.value = '';
+                                }
+                                if(input.id === 'card_leto_mozaika' || input.id === 'm1' || input.id === 't1'){
+                                    input.checked = true;
+                                }
+                              });
+                        })
                 }else{
-                    getThanksModal(answerCheck, answerPhone)
+                    getThanksModal(answerCheck, answerPhone);
+                    label.classList.add('red');
                 }
             });
         
@@ -160,9 +173,6 @@ const sendForm = () => {
             })
         }
         const getThanksModal = (statis, answer, application = '') => {
-            if(application){
-                clearForm();
-            };
             thanksModal.style.display = 'block';
             const formContent = thanksModal.querySelector('.form-content');
             formContent.innerHTML = `
@@ -174,26 +184,26 @@ const sendForm = () => {
             thanksModal.querySelector('.form-wrapper').append(formContent);
             removePopup()
         };
+        const clearForm = () => {
+            const popup = document.querySelectorAll('.popup');
+            popup.forEach((item) => {
+                if(item.id === 'callback_form' || item.id === 'free_visit_form'){
+                    item.style.display ='';
+                }
+            })
+        };
+
         let timeOut = () => {
             setTimeout(() => {
-               clearForm()
-            }, 3000);
+                const popup = document.querySelectorAll('.popup');
+                     popup.forEach((item) => {
+                     item.style.display ='';
+                     })
+            }, 2000);
         };
     }) 
 }
 sendForm()
-
-const clearForm = () => {
-    const popup = document.querySelectorAll('.popup');
-    popup.forEach((item) => {
-    item.style.display ='';
-    const valueForm = document.querySelectorAll('input');
-    valueForm.forEach((elem) => {
-                elem.value = '';
-                elem.checked = false;     
-    })
-})
-};
 
 const getSurprise =() => {
     const fixedGift = document.querySelector('.fixed-gift'),
@@ -304,37 +314,68 @@ arrowScroll();
 const getArrow = () => {
 // создать стрелочки
 const gallerySlider = document.querySelector('.gallery-slider'),
-    servicesSlider = document.querySelector('.services-slider')
-const prev = document.createElement("div");
-gallerySlider.style.position = 'relative';
-servicesSlider.style.position = 'relative';
-prev.classList.add('prev');
-prev.classList.add('slider-arrow');
-prev.innerHTML = `
+    services = document.querySelector('#services'),
+    servicesSlider = services.querySelector('.services-slider');
+
+const galleryPrev = () => {
+    const prev = document.createElement("div");
+    gallerySlider.style.position = 'relative';
+    prev.classList.add('prev');
+    prev.classList.add('slider-arrow');
+    prev.innerHTML = `
         <span>
             <i class='fa fa-angel-left'></i>
         </span>
 `;
-gallerySlider.append(prev);
-// servicesSlider.append(prev);
-const next = document.createElement("div");
-next.classList.add('next');
-next.classList.add('slider-arrow');
-next.innerHTML = `
+    gallerySlider.append(prev);
+}
+galleryPrev();
+const servisePrev = () => {
+    const prev = document.createElement("div");
+    servicesSlider.style.position = 'relative';
+    prev.classList.add('prev');
+    prev.classList.add('slider-arrow');
+    prev.innerHTML = `
+        <span>
+            <i class='fa fa-angel-left'></i>
+        </span>
+`;
+    servicesSlider.append(prev);
+}
+servisePrev();
+
+const galleryNext = () => {
+    const next = document.createElement("div");
+    next.classList.add('next');
+    next.classList.add('slider-arrow');
+    next.innerHTML = `
         <span>
             <i class='fa fa-angel-right'></i>
         </span>
 `;
-gallerySlider.append(next);
-// servicesSlider.append(next);
+    gallerySlider.append(next);
+}
+galleryNext();
+const serviseNext = () => {
+    const next = document.createElement("div");
+    next.classList.add('next');
+    next.classList.add('slider-arrow');
+    next.innerHTML = `
+        <span>
+            <i class='fa fa-angel-right'></i>
+        </span>
+    `;
+
+servicesSlider.append(next);
+}
+serviseNext();
+
 }
 getArrow()
 
 const mainSlider = () => {
     const gallerySlider = document.querySelector('.gallery-slider'),
-        slide = gallerySlider.querySelectorAll('.slide'),
-        btnPrev = document.querySelector('.prev'),
-        btnNext = document.querySelector('.next');
+        slide = gallerySlider.querySelectorAll('.slide');
     slide.forEach((item) => {
         item.style.display = 'none'
     })
@@ -381,7 +422,6 @@ const mainSlider = () => {
         let target = e.target;
         
         if(target.closest(".slider-arrow") ){
-            console.log(target);
             stoptSlide();
         }
     });
@@ -405,27 +445,47 @@ const mainSlider = () => {
 mainSlider()
 const slideCarousel = () => {
     const servicesSlider = document.querySelector('.services-slider'),
-        slide = document.querySelectorAll('.slide ');
-        class SliderCarousel{
-            constructor(){
+        slide = servicesSlider.querySelectorAll('.slide'),
+        btnPrev = servicesSlider.querySelector('.prev'),
+        btnNext = servicesSlider.querySelector('.next');
+        
+    let offset = 1115;
 
-            }
-            init(){
-
-            }
+    slide[0].style.transition = '0.5s all';
+    servicesSlider.style.overflow = 'hidden';
+    slide.forEach(item =>{
+        item.style.minWidth = '210px';
+    });
+    slide[0].style.marginLeft = `-${offset}px`;
+    btnNext.addEventListener('click', () => {
+        offset += 222;
+        if(offset > 1110){
+            offset = 0;
         }
-        const carousel = new SliderCarousel()
+        slide[0].style.marginLeft = `-${offset}px`;
+    });
+    btnPrev.addEventListener('click', () => {
+        offset -= 222;
+        if(offset <= 0){
+            offset = 1110;
+        }
+        slide[0].style.marginLeft = `-${offset}px`;
+    });
 }
 slideCarousel()
 const calc = () => {
-    const formCalc = document.querySelector('#card_order'),
-        cardType = formCalc.querySelectorAll('[name="card-type"]'),
+    const formCalc = document.querySelector('.right>#card_order');
+    if(formCalc){
+        const cardType = formCalc.querySelectorAll('[name="card-type"]'),
         mozaika = formCalc.querySelector('#card_leto_mozaika'),
         schelkovo = formCalc.querySelector('#card_leto_schelkovo'),
         promoCode = formCalc.querySelector('[name="name"]'),
         priceTotal = formCalc.querySelector('#price-total');
     let count = 0;
-        formCalc.addEventListener('change', () => {
+        if(priceTotal){
+            priceTotal.innerHTML = `1999`
+        }
+        formCalc.addEventListener('input', () => {
             if (mozaika.checked) {
                 count = (cardType[0].checked === true) ? 1999 :
                 (cardType[1].checked === true) ? 9900 :
@@ -443,6 +503,8 @@ const calc = () => {
               }
               priceTotal.innerHTML = `${count}`;
         })
+    }
+    
 }
 calc()
 

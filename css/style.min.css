@@ -604,6 +604,7 @@ html#schelkovo #cards #card_order input[type=radio]+label {
     cursor: pointer
 }
 
+
 html#mozaika #cards #card_order input[type=radio]:checked+label,
 html#schelkovo #cards #card_order input[type=radio]:checked+label {
     background-image: none;
@@ -1750,6 +1751,10 @@ nav.popup-menu .close-menu-btn img {
     left: -29px
 }
 
+#card_order p.personal-data input[type=checkbox]:not(checked)+.red:before {
+    border: 1px solid red;
+}
+
 #card_order p.personal-data input[type=checkbox]:checked+label:before {
     content: url(../images/checked.png);
     width: 21px;
@@ -2206,6 +2211,9 @@ p.personal-data input[type=checkbox]:not(checked)+label:before {
     position: absolute;
     top: -3px;
     left: -29px
+}
+p.personal-data input[type=checkbox]:not(checked)+.red:before{
+    border: 1px solid red;
 }
 
 p.personal-data input[type=checkbox]:checked+label:before {
