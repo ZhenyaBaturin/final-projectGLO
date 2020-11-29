@@ -141,7 +141,7 @@ const sendForm = () => {
                         .catch((error) => {
                             getThanksModal(answerThanks, errorMessege);
                             timeOut();
-                            
+                            clearForm();
                             console.log(error);
                         })
                         .finally(() => {

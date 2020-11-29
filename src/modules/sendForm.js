@@ -73,7 +73,6 @@ const sendForm = () => {
                     const formData = new FormData(elem);
                     let body = {};
                     formData.forEach((val, key) => body[key] = val);
-                    console.log(body);
                     // fetch
                     postData(body)
                         .then((response) => {
