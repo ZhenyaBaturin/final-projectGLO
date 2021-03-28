@@ -41,10 +41,10 @@ const sendForm = () => {
                 e.preventDefault();
                 const checbox = elem.querySelector('[type="checkbox"]');
                 const phone =elem.querySelector('[type="tel"]'),
-                inputs = elem.querySelectorAll('input'),
-                cardType = elem.querySelectorAll('[name="card-type"]'),
-                clubName = elem.querySelectorAll('[name="club-name"]'),
-                label = elem.querySelector('p>label');
+                    inputs = elem.querySelectorAll('input'),
+                    cardType = elem.querySelectorAll('[name="card-type"]'),
+                    clubName = elem.querySelectorAll('[name="club-name"]'),
+                    label = elem.querySelector('p>label');
 
                 if(phone.value.length < 6 || !phone.value.match(/^((8|\+7)[\-]?)?(\(?\d{3}\)?[\-]?)?[\d\-]{7,10}$/ig)){
                     phone.style.border = 'solid 1px red';
